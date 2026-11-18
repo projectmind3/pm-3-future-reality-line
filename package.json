@@ -1,0 +1,11 @@
+{
+  "name": "pm-3-future-reality-line",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LINE bot with rich menu",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test"
+  }
+}
