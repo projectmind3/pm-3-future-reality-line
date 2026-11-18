@@ -60,17 +60,28 @@ test('empty events -> 200 {}', async () => {
   assert.strictEqual(r.body, '{}');
 });
 
-test('menu areas tile 2500x843 without overlap', () => {
+test('menu areas tile 2500x1686 without overlap', () => {
   const d = buildRichMenuDefinition({});
-  assert.deepStrictEqual(d.size, { width: 2500, height: 843 });
+  assert.deepStrictEqual(d.size, { width: 2500, height: 1686 });
   assert.strictEqual(d.chatBarText, 'メニュー');
   assert.strictEqual(d.areas.length, 4);
-  let x = 0;
-  for (const a of d.areas) {
-    assert.deepStrictEqual(a.bounds, { x, y: 0, width: 625, height: 843 });
-    x += 625;
+  assert.deepStrictEqual(d.areas.map((a) => a.bounds), [
+    { x: 0, y: 0, width: 1250, height: 843 },
+    { x: 1250, y: 0, width: 1250, height: 843 },
+    { x: 0, y: 843, width: 1250, height: 843 },
+    { x: 1250, y: 843, width: 1250, height: 843 },
+  ]);
+  const total = d.areas.reduce((s, a) => s + a.bounds.width * a.bounds.height, 0);
+  assert.strictEqual(total, 2500 * 1686);
+  for (let i = 0; i < 4; i++) {
+    for (let j = i + 1; j < 4; j++) {
+      const p = d.areas[i].bounds;
+      const q = d.areas[j].bounds;
+      const overlap = p.x < q.x + q.width && q.x < p.x + p.width &&
+        p.y < q.y + q.height && q.y < p.y + p.height;
+      assert.ok(!overlap, `areas ${i} and ${j} overlap`);
+    }
   }
-  assert.strictEqual(x, 2500);
 });
 
 test('labels, uri-only actions and addresses', () => {
