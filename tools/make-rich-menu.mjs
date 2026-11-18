@@ -23,20 +23,19 @@ const out = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'as
 
 // Simple white icons on a 100x100 viewBox.
 const ICONS = {
-  bulb: `<circle cx="50" cy="38" r="26"/>
-    <path d="M38 62h24v10a4 4 0 0 1-4 4H42a4 4 0 0 1-4-4z"/>
-    <rect x="40" y="79" width="20" height="6" rx="3"/>`,
-  folder: `<path d="M8 24a5 5 0 0 1 5-5h24l9 10h41a5 5 0 0 1 5 5v43a5 5 0 0 1-5 5H13a5 5 0 0 1-5-5z"/>`,
   home: `<path fill-rule="evenodd" d="M50 10L6 50h12v38h64V50h12zM42 88V62h16v26z"/>`,
-  person: `<circle cx="50" cy="30" r="19"/>
-    <path d="M12 90c0-22 15-35 38-35s38 13 38 35z"/>`,
+  calendar: `<rect x="26" y="6" width="10" height="22" rx="5"/>
+    <rect x="64" y="6" width="10" height="22" rx="5"/>
+    <path fill-rule="evenodd" d="M16 16h68a8 8 0 0 1 8 8v60a8 8 0 0 1-8 8H16a8 8 0 0 1-8-8V24a8 8 0 0 1 8-8zM18 42v42h64V42zM24 50h14v10H24zM43 50h14v10H43zM62 50h14v10H62zM24 66h14v10H24zM43 66h14v10H43z"/>`,
+  chat: `<path fill-rule="evenodd" d="M20 14h60a12 12 0 0 1 12 12v34a12 12 0 0 1-12 12H50L28 90V72h-8a12 12 0 0 1-12-12V26a12 12 0 0 1 12-12zM25 43a6 6 0 1 0 12 0a6 6 0 1 0-12 0zM44 43a6 6 0 1 0 12 0a6 6 0 1 0-12 0zM63 43a6 6 0 1 0 12 0a6 6 0 1 0-12 0z"/>`,
+  building: `<path fill-rule="evenodd" d="M22 8h56v84H22zM32 18h12v12H32zM56 18h12v12H56zM32 38h12v12H32zM56 38h12v12H56zM32 58h12v12H32zM56 58h12v12H56zM42 76h16v16H42z"/>`,
 };
 
 const panels = [
-  { text: '新しいアイデア', bg: '#D9480F', icon: 'bulb' },
-  { text: 'プロジェクト', bg: '#1864AB', icon: 'folder' },
-  { text: 'ホーム', bg: '#2B8A3E', icon: 'home' },
-  { text: 'マイページ', bg: '#6741D9', icon: 'person' },
+  { text: '物件を見る', bg: '#2B8A3E', icon: 'home' },
+  { text: '内見予約', bg: '#D9480F', icon: 'calendar' },
+  { text: 'お問い合わせ', bg: '#1864AB', icon: 'chat' },
+  { text: '会社案内', bg: '#6741D9', icon: 'building' },
 ];
 
 async function renderLine(text) {
