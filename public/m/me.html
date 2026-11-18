@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>マイページ</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <main class="page">
+    <h1>マイページ</h1>
+    <p id="status">読み込み中です…</p>
+    <div class="card profile" id="profile" hidden>
+      <img id="avatar" alt="" hidden>
+      <div class="name" id="name"></div>
+    </div>
+    <nav class="nav">
+      <a href="/m/new">新しいアイデア</a>
+      <a href="/m/projects">プロジェクト</a>
+      <a href="/m/home">ホーム</a>
+      <a href="/m/me" class="current">マイページ</a>
+    </nav>
+  </main>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <script src="/app.js"></script>
+  <script>
+    App.start(function () {
+      return liff.getProfile().then(function (p) {
+        document.getElementById("status").hidden = true;
+        document.getElementById("name").textContent = p.displayName;
+        if (p.pictureUrl) {
+          var img = document.getElementById("avatar");
+          img.src = p.pictureUrl;
+          img.hidden = false;
+        }
+        document.getElementById("profile").hidden = false;
+      });
+    });
+  </script>
+</body>
+</html>

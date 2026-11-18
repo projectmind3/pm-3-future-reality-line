@@ -1,0 +1,72 @@
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #f5f6f8;
+  color: #222;
+  font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif;
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+}
+
+.page {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 24px 16px 32px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 22px;
+  margin: 8px 0 16px;
+}
+
+.card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+.card p { margin: 0; color: #555; }
+
+#status { margin: 24px 0; text-align: center; color: #555; }
+#status.error { color: #c0392b; }
+
+.profile img {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #e3e5e8;
+  margin-bottom: 12px;
+}
+
+.profile .name { font-size: 18px; font-weight: bold; }
+
+.nav {
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+}
+
+.nav a {
+  flex: 1;
+  padding: 12px 4px;
+  text-align: center;
+  font-size: 12px;
+  color: #06c755;
+  background: #fff;
+  border: 1px solid #d8dbe0;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.nav a.current {
+  background: #06c755;
+  border-color: #06c755;
+  color: #fff;
+  font-weight: bold;
+}
