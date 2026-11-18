@@ -19,12 +19,13 @@ const MENU_PREFIX = 'pm-menu-';
 const MENU_WIDTH = 2500;
 const MENU_HEIGHT = 1686;
 
-// ID is a placeholder; replaced by LINE_LIFF_ID when set.
+// Order: top-left, top-right, bottom-left, bottom-right.
+// The uri is used as-is (never replaced by LINE_LIFF_ID); text buttons send their text.
 const MENU_BUTTONS = [
-  { label: '新しいアイデア', uri: 'https://liff.line.me/ID?redirect=%2Fm%2Fnew' },
-  { label: 'プロジェクト', uri: 'https://liff.line.me/ID?redirect=%2Fm%2Fprojects' },
-  { label: 'ホーム', uri: 'https://liff.line.me/ID?redirect=%2Fm%2Fhome' },
-  { label: 'マイページ', uri: 'https://liff.line.me/ID?redirect=%2Fm%2Fme' },
+  { label: '物件を見る', uri: 'https://liff.line.me/2012657091-N3HrjM7P' },
+  { label: '内見予約', text: '内見予約' },
+  { label: 'お問い合わせ', text: 'お問い合わせ' },
+  { label: '会社案内', text: '会社案内' },
 ];
 
 const MIME = {
@@ -47,7 +48,6 @@ const MIME = {
 // ---------- rich menu definition ----------
 
 function buildRichMenuDefinition(env = process.env) {
-  const liffId = env.LINE_LIFF_ID;
   const width = MENU_WIDTH / 2;
   const height = MENU_HEIGHT / 2;
   return {
@@ -56,13 +56,9 @@ function buildRichMenuDefinition(env = process.env) {
     chatBarText: 'メニュー',
     areas: MENU_BUTTONS.map((b, i) => ({
       bounds: { x: (i % 2) * width, y: Math.floor(i / 2) * height, width, height },
-      action: {
-        type: 'uri',
-        label: b.label,
-        uri: liffId
-          ? b.uri.replace(/^(https:\/\/liff\.line\.me\/)[^?/#]*/, (_, p) => p + liffId)
-          : b.uri,
-      },
+      action: b.uri
+        ? { type: 'uri', label: b.label, uri: b.uri }
+        : { type: 'message', label: b.label, text: b.text },
     })),
   };
 }
@@ -250,16 +246,32 @@ function send(res, status, body, type = 'application/json; charset=utf-8') {
 }
 
 const GREETING =
-  'フォローありがとうございます！\n下のメニューから「新しいアイデア」「プロジェクト」「ホーム」「マイページ」を開けます。気軽にご利用ください。';
+  'フォローありがとうございます！\n下のメニューから「物件を見る」「内見予約」「お問い合わせ」「会社案内」をご利用いただけます。気軽にご利用ください。';
 const HELP =
-  'メッセージありがとうございます。ごめんなさい、内容を理解できませんでした。\n画面下のメニューから「新しいアイデア」「プロジェクト」「ホーム」「マイページ」をお選びください。';
+  'メッセージありがとうございます。ごめんなさい、内容を理解できませんでした。\n画面下のメニューから「物件を見る」「内見予約」「お問い合わせ」「会社案内」をお選びください。';
+
+// Replies for text buttons. Replace the 【placeholders】 with real information later.
+const REPLY_TEXTS = {
+  内見予約:
+    '内見のご予約ありがとうございます。ご希望の日にちと物件名、またはお電話番号をこのトークでお知らせください。担当者よりご連絡いたします。',
+  お問い合わせ:
+    'お問い合わせありがとうございます。\nお電話：【電話番号】\nメール：【メールアドレス】\n営業時間：【営業時間】',
+  会社案内:
+    '会社案内\n会社名：【会社名】\n所在地：【所在地】\n営業時間：【営業時間】',
+};
 
 async function handleEvent(event) {
   if (!event || !event.replyToken) return;
   if (event.type === 'follow') {
     await replyMessages(event.replyToken, [{ type: 'text', text: GREETING }]);
   } else if (event.type === 'message') {
-    await replyMessages(event.replyToken, [{ type: 'text', text: HELP }]);
+    const msg = event.message;
+    let text = HELP;
+    if (msg && msg.type === 'text' && typeof msg.text === 'string') {
+      const key = msg.text.trim();
+      if (Object.hasOwn(REPLY_TEXTS, key)) text = REPLY_TEXTS[key];
+    }
+    await replyMessages(event.replyToken, [{ type: 'text', text }]);
   }
 }
 
@@ -347,4 +359,4 @@ if (require.main === module) {
   http.createServer(handler).listen(port, () => console.log('listening on ' + port));
 }
 
-module.exports = { handler, buildRichMenuDefinition, richMenuName, ensureRichMenu, MENU_BUTTONS };
+module.exports = { handler, buildRichMenuDefinition, richMenuName, ensureRichMenu, MENU_BUTTONS, handleEvent, REPLY_TEXTS, HELP };
