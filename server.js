@@ -17,7 +17,7 @@ const PUBLIC_DIR = path.join(__dirname, 'public');
 const RICH_MENU_IMAGE = path.join(__dirname, 'assets', 'rich-menu.png');
 const MENU_PREFIX = 'pm-menu-';
 const MENU_WIDTH = 2500;
-const MENU_HEIGHT = 843;
+const MENU_HEIGHT = 1686;
 
 // ID is a placeholder; replaced by LINE_LIFF_ID when set.
 const MENU_BUTTONS = [
@@ -48,13 +48,14 @@ const MIME = {
 
 function buildRichMenuDefinition(env = process.env) {
   const liffId = env.LINE_LIFF_ID;
-  const width = MENU_WIDTH / MENU_BUTTONS.length;
+  const width = MENU_WIDTH / 2;
+  const height = MENU_HEIGHT / 2;
   return {
     size: { width: MENU_WIDTH, height: MENU_HEIGHT },
     selected: true,
     chatBarText: 'メニュー',
     areas: MENU_BUTTONS.map((b, i) => ({
-      bounds: { x: i * width, y: 0, width, height: MENU_HEIGHT },
+      bounds: { x: (i % 2) * width, y: Math.floor(i / 2) * height, width, height },
       action: {
         type: 'uri',
         label: b.label,
