@@ -23,7 +23,8 @@ const out = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', 'as
 
 // Simple white icons on a 100x100 viewBox.
 const ICONS = {
-  home: `<path fill-rule="evenodd" d="M50 10L6 50h12v38h64V50h12zM42 88V62h16v26z"/>`,
+  search: `<circle cx="42" cy="42" r="27" fill="none" stroke="#FFFFFF" stroke-width="10"/>
+    <path d="M62 62L88 88" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>`,
   calendar: `<rect x="26" y="6" width="10" height="22" rx="5"/>
     <rect x="64" y="6" width="10" height="22" rx="5"/>
     <path fill-rule="evenodd" d="M16 16h68a8 8 0 0 1 8 8v60a8 8 0 0 1-8 8H16a8 8 0 0 1-8-8V24a8 8 0 0 1 8-8zM18 42v42h64V42zM24 50h14v10H24zM43 50h14v10H43zM62 50h14v10H62zM24 66h14v10H24zM43 66h14v10H43z"/>`,
@@ -32,7 +33,7 @@ const ICONS = {
 };
 
 const panels = [
-  { text: '物件を見る', bg: '#2B8A3E', icon: 'home' },
+  { text: '物件を見る', bg: '#2B8A3E', icon: 'search' },
   { text: '内見予約', bg: '#D9480F', icon: 'calendar' },
   { text: 'お問い合わせ', bg: '#1864AB', icon: 'chat' },
   { text: '会社案内', bg: '#6741D9', icon: 'building' },
