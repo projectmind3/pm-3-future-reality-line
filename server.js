@@ -124,9 +124,8 @@ async function replyMessages(replyToken, messages) {
 
 // ---------- rich menu setup ----------
 
-let richMenuDone = false;
 let richMenuRunning = false;
-let richMenuRetryAt = 0;
+let richMenuAttempted = false;
 
 async function setupRichMenu() {
   let png;
@@ -190,9 +189,10 @@ async function deleteOldMenus(menus, keepId) {
   }
 }
 
-// Runs at most once per process (retries after a cooldown on failure); bounded to 3s.
+// Runs at most once per process; bounded to 3s.
 async function ensureRichMenu() {
-  if (richMenuDone || richMenuRunning || Date.now() < richMenuRetryAt) return;
+  if (richMenuAttempted || richMenuRunning) return;
+  richMenuAttempted = true;
   richMenuRunning = true;
   let timer;
   try {
@@ -202,9 +202,7 @@ async function ensureRichMenu() {
         timer = setTimeout(() => rej(new Error('timeout')), 3000);
       }),
     ]);
-    richMenuDone = true;
   } catch (e) {
-    richMenuRetryAt = Date.now() + 60000;
     console.error('ensureRichMenu failed:', e && e.message ? e.message : 'error');
   } finally {
     clearTimeout(timer);
@@ -277,9 +275,6 @@ async function handleEvent(event) {
 
 async function handleWebhook(req, res) {
   if (req.method !== 'POST') return send(res, 405, { error: 'method not allowed' });
-  // fire and forget: never delays or fails the webhook
-  ensureRichMenu().catch(() => {});
-
   let raw;
   try {
     raw = await readBody(req);
@@ -297,6 +292,8 @@ async function handleWebhook(req, res) {
   }
   const events = Array.isArray(payload.events) ? payload.events : [];
   send(res, 200, {});
+  // fire and forget: never delays or fails a validated webhook
+  ensureRichMenu().catch(() => {});
   for (const event of events) {
     try {
       await handleEvent(event);

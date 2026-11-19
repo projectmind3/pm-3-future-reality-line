@@ -28,7 +28,10 @@
           liff.login();
           return false;
         }
-        return true;
+        return liff.getProfile().then(function (profile) {
+          window.App.profile = profile;
+          return true;
+        });
       });
   }
 

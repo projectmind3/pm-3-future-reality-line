@@ -25,16 +25,16 @@
   <script src="/app.js"></script>
   <script>
     App.start(function () {
-      return liff.getProfile().then(function (p) {
-        document.getElementById("status").hidden = true;
-        document.getElementById("name").textContent = p.displayName;
-        if (p.pictureUrl) {
-          var img = document.getElementById("avatar");
-          img.src = p.pictureUrl;
-          img.hidden = false;
-        }
-        document.getElementById("profile").hidden = false;
-      });
+      var p = App.profile;
+      if (!p) return;
+      document.getElementById("status").hidden = true;
+      document.getElementById("name").textContent = p.displayName;
+      if (p.pictureUrl) {
+        var img = document.getElementById("avatar");
+        img.src = p.pictureUrl;
+        img.hidden = false;
+      }
+      document.getElementById("profile").hidden = false;
     });
   </script>
 </body>
